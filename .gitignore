@@ -1,0 +1,6 @@
+*.o
+*.a
+*.out
+ep1sh
+.ycm_extra_conf.py
+*.pyc
