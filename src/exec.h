@@ -1,30 +1,13 @@
 #ifndef EP1SH__EXEC_H
 #define EP1SH__EXEC_H
 
+#include <stdbool.h>
+#include <string.h>
 #include <errno.h>
 #include <unistd.h>
 #include "debug.h"
 
-bool check_file(const char* fname) { 
-  int rval;
-
-  rval = access(fname, F_OK);
-  if (!rval)
-    return true;
-
-  switch (rval) {
-    case ENOENT:
-      LOGERR("");
-      break;
-
-    case EACCES:
-      LOGERR("");
-      break;
-    default:
-      LOGERR("");
-  }
-
-  return false;
-}
+bool ep1sh_file_ok(const char* fname);
+bool ep1sh_can_execute(const char* fname);
 
 #endif

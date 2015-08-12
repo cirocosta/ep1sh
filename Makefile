@@ -1,28 +1,38 @@
 CC ?= clang
-LDPATH = 
-
-INCLUDES = 
-LIBS= 
+DEFS = -D_POSIX_C_SOURCE=200809L
+INCLUDES = -I/usr/include
+LIBS= -lreadline
 BUILD := debug
 cflags.debug := -Wall -g -DDEBUG
 cflags.release := -03 -DNDEBUG
-CFLAGS := -std=c99 ${cflags.${BUILD}}
+CFLAGS := -std=gnu99 ${cflags.${BUILD}}
 
-
+libep1sh = lib/libep1sh.a
 SOURCE = src/main.c
-OBJECTS = src/main.o
+LIB_OBJS := $(patsubst %.c, %.o, $(filter-out $(SOURCE), $(wildcard src/*.c)))
+TESTS:= $(patsubst %.c, %.out, $(wildcard test/*.c))
 
-ep1sh: lib/libep1sh.a $(SOURCE)
-	$(CC) $(CFLAGS) $(SOURCE) $(INCLUDES) $(LDPATH) $(LIBS) -o $@ $<
+all: ep1sh test
 
-lib/libep1sh.a: $(OBJECTS)
+ep1sh: $(libep1sh) $(SOURCE)
+	$(CC) $(CFLAGS) $(SOURCE) $(DEFS) $(INCLUDES) $(LIBS) -o $@ $<
+
+$(libep1sh): $(LIB_OBJS)
 	$(AR) rvs $@ $^
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o  $@ $<
+	$(CC) $(CFLAGS) $(DEFS) -c -o  $@ $<
 
 
-.PHONY: clean
+.PHONY: clean test
+
+test: $(libep1sh) $(TESTS)
+
+%.out: %.c
+	$(CC) $(CFLAGS) $< $(DEFS) $(INCLUDES) $(LIBS) -o $@ $(libep1sh) 
+
+print-%:
+	@echo '$*=$($*)'
 
 clean:
 	find . -name "*.o" -delete & \
