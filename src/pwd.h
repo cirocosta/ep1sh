@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 
-inline int ep1sh_command_pwd(int argc, char** argv)
+static inline int ep1sh_command_pwd(int argc, char** argv)
 {
   char buf[PATH_MAX] = { 0 };
 

@@ -7,7 +7,7 @@ cflags.debug := -Wall -g -DDEBUG
 cflags.release := -03 -DNDEBUG
 CFLAGS := -std=gnu99 ${cflags.${BUILD}}
 
-libep1sh = lib/libep1sh.a
+libep1sh = src/libep1sh.a
 SOURCE = src/main.c
 LIB_OBJS := $(patsubst %.c, %.o, $(filter-out $(SOURCE), $(wildcard src/*.c)))
 TESTS:= $(patsubst %.c, %.out, $(wildcard test/*.c))

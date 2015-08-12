@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-inline int ep1sh_command_cd(int argc, char** argv)
+static inline int ep1sh_command_cd(int argc, char** argv)
 {
 
   return EXIT_FAILURE;
