@@ -9,5 +9,6 @@
 
 bool ep1sh_file_ok(const char* fname);
 bool ep1sh_can_execute(const char* fname);
+int ep1sh_command_execute(int argc, char* argv[]);
 
 #endif
