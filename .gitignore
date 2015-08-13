@@ -4,8 +4,5 @@
 .ycm_extra_conf.py
 *.pyc
 
-# the executable
+!include/
 ep1sh
-
-# but not the include/ep1sh directory
-!epish/
