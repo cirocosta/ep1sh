@@ -23,7 +23,7 @@ static inline bool dir_exists(const char* dirname)
   struct stat sb;
 
   if (!~stat(dirname, &sb)) {
-    perror("cd::dir_exists: ");
+    perror("(Error) - cd::dir_exists: ");
     return false;
   }
 
@@ -35,35 +35,34 @@ static inline bool dir_exists(const char* dirname)
 
 static inline int ep1sh_command_cd(int argc, char** argv)
 {
-  char* homedir = NULL;
-  char* str_ref = NULL;
+  char* alloc_home = NULL;
+  char* ref_home = NULL;
 
   if (argc < 2) {
-    str_ref = getenv("HOME");
-    // duplicate so that we do not free the wrong thing
-    if (str_ref != NULL)
-      homedir = strdup(str_ref);
-    else
-      homedir = strdup(getpwuid(getuid())->pw_dir);
-    if (!dir_exists(homedir)) {
-      FREE(homedir);
-      return EXIT_FAILURE;
+    ref_home = getenv("HOME");
+
+    if (!ref_home) {
+      alloc_home = strdup(getpwuid(getuid())->pw_dir);
+
+      if (!dir_exists(alloc_home)) {
+        FREE(alloc_home);
+        return EXIT_FAILURE;
+      }
     }
-    str_ref = NULL;
+
   } else if (argc == 2) {
-    homedir = realpath(argv[1], NULL);
-    if (homedir == NULL) {
-      perror("cd: ");
-      return EXIT_FAILURE;
-    }
+    alloc_home = strdup(argv[1]);
   } else {
     write(STDERR_FILENO, TOO_MANY_ARGS, strlen(TOO_MANY_ARGS));
     return EXIT_FAILURE;
   }
 
-  chdir(homedir);
+  if (ref_home)
+    chdir(ref_home);
+  else
+    chdir(alloc_home);
 
-  FREE(homedir);
+  FREE(alloc_home);
   return EXIT_SUCCESS;
 }
 

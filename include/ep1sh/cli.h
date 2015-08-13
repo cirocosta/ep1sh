@@ -29,8 +29,7 @@ typedef struct ep1sh_command_t {
 
 static ep1sh_command_t EP1SH_PROCEDURES[] = {
   { "cd", &ep1sh_command_cd },
-  { "pwd", &ep1sh_command_pwd },
-  { "source", &ep1sh_command_execute },
+  { "pwd", &ep1sh_command_pwd }
 };
 
 #define EP1SH_PROCEDURES_SIZE                                                  \

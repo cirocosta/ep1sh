@@ -2,6 +2,7 @@
 
 void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
 {
+  int command_errcode = 0;
   char* input = NULL;
   char prompt[100];
   char pwd[PATH_MAX] = { 0 };
@@ -32,15 +33,14 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
 
     e.key = argv[0];
     ep = hsearch(e, FIND);
-    if (!ep) {
-      LOGERR("Command %s not found :(\n", argv[0]);
-      FREE(input);
-      FREE(argv);
-      continue;
-    }
-
-    (*(ep1sh_command)ep->data)(argc, argv);
-
+    
+    // we're either dealing with an internal method
+    // or an executable that can be found in $PATH
+    // or relative to the cwd
+    if (ep)
+      command_errcode = (*(ep1sh_command)ep->data)(argc, argv);
+    else 
+      command_errcode = ep1sh_command_execute(argc, argv);
 
     FREE(input);
     FREE(argv); // FIXME WRONG. Must free each of them. Create a ARR_FREE macro
@@ -50,6 +50,7 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
 
   ep1sh_destroy();
 }
+
 
 char** ep1sh_tokenize(const char* input, unsigned* size)
 {

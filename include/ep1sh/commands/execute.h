@@ -1,11 +1,13 @@
 #ifndef EP1SH__EXEC_H
 #define EP1SH__EXEC_H
 
+#include "ep1sh/debug.h"
+
+#include <sys/wait.h>
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include "ep1sh/debug.h"
 
 bool ep1sh_file_ok(const char* fname);
 bool ep1sh_can_execute(const char* fname);
