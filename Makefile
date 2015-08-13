@@ -9,7 +9,7 @@ CFLAGS := -std=gnu99 ${cflags.${BUILD}}
 
 libep1sh = src/libep1sh.a
 SOURCE = src/main.c
-LIB_OBJS := $(patsubst %.c, %.o, $(filter-out $(SOURCE), $(wildcard src/*.c)))
+LIB_OBJS := $(patsubst %.c, %.o, $(filter-out $(SOURCE), $(shell find src/ -name '*.c')))
 TESTS:= $(patsubst %.c, %.out, $(wildcard test/*.c))
 
 all: ep1sh test
