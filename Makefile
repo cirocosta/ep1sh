@@ -1,6 +1,6 @@
 CC ?= clang
 DEFS = -D_POSIX_C_SOURCE=200809L
-INCLUDES = -I/usr/include
+INCLUDES = -I/usr/include -I./include
 LIBS= -lreadline
 BUILD := debug
 cflags.debug := -Wall -g -DDEBUG
@@ -21,7 +21,7 @@ $(libep1sh): $(LIB_OBJS)
 	$(AR) rvs $@ $^
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(DEFS) -c -o  $@ $<
+	$(CC) $(CFLAGS) $(DEFS) $(INCLUDES) -c -o  $@ $<
 
 
 .PHONY: clean test

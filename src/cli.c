@@ -1,4 +1,4 @@
-#include "cli.h"
+#include "ep1sh/cli.h"
 
 void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
 {
@@ -33,7 +33,7 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
     e.key = argv[0];
     ep = hsearch(e, FIND);
     if (!ep) {
-      LOGERR("Command %s not found :(", argv[0]);
+      LOGERR("Command %s not found :(\n", argv[0]);
       FREE(input);
       FREE(argv);
       continue;

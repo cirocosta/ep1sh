@@ -1,5 +1,5 @@
-#include "../src/cli.h"
-#include "../src/debug.h"
+#include "ep1sh/cli.h"
+#include "ep1sh/debug.h"
 
 void test1()
 {
