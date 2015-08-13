@@ -1,7 +1,6 @@
 sudo: false
 language: c
 compiler:
-  - gcc
   - clang
 addons:
   apt:
@@ -17,7 +16,7 @@ addons:
 
 before_script:
   - export BUILD=debug
-  - if [ "$CXX" = "gcc" ]; then export CC="gcc-4.9"; fi
+  # - if [ "$CXX" = "gcc" ]; then export CC="gcc-4.9"; fi
   - if [ "$CXX" = "clang" ]; then export CC="clang-3.6"; fi
   - make 
 
