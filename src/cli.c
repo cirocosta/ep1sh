@@ -69,7 +69,7 @@ char** ep1sh_tokenize(const char* input, unsigned* size)
     count++;
   }
 
-  result = malloc(count * sizeof(*result));
+  result = malloc((count+1) * sizeof(*result));
   ASSERT(result, "Couldn't allocate memory during tokenization");
   count = 0;
 
@@ -80,6 +80,8 @@ char** ep1sh_tokenize(const char* input, unsigned* size)
     tmp = strtok(NULL, " ");
     count++;
   }
+
+  result[count] = NULL;
 
   *size = count;
 
