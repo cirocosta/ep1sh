@@ -1,0 +1,59 @@
+#ifndef EP1SH__CD_H
+#define EP1SH__CD_H
+
+
+#include "ep1sh/common.h"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include <pwd.h>
+#include <stdio.h>
+#include <limits.h>
+#include <string.h>
+
+#include <stdlib.h>
+#include <unistd.h>
+
+static const char* TOO_MANY_ARGS =
+ "\nError: Too many arguments supplied.\n"
+ "Usage: cd [pathname]\n";
+
+static inline int dir_exists(const char* dirname) {
+  struct stat sb;
+
+  return !stat(dirname, &sb) && S_ISDIR(sb.st_mode);
+}
+
+static inline int ep1sh_command_cd(int argc, char** argv)
+{
+  /* struct stat sb; */
+  /* char *linkname; */
+  char* homedir = NULL;
+  char* str_ref = NULL;
+
+  if (argc < 2) {
+    str_ref = getenv("HOME");
+    // duplicate so that we do not free the wrong thing
+    if (str_ref != NULL)
+      homedir = strdup(str_ref);
+    else
+      homedir = strdup(getpwuid(getuid())->pw_dir);
+    str_ref = NULL;
+  } else if (argc == 3) {
+    homedir = realpath(argv[1], NULL); 
+    if (homedir == NULL) {
+      perror("cd: ");
+      return EXIT_FAILURE;
+    }
+  } else {
+    write(STDERR_FILENO, TOO_MANY_ARGS, strlen(TOO_MANY_ARGS));
+    return EXIT_FAILURE;
+  }
+
+
+  FREE(homedir);
+  return EXIT_SUCCESS;
+}
+
+#endif

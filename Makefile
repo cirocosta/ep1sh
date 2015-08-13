@@ -1,5 +1,5 @@
 CC ?= clang
-DEFS = -D_POSIX_C_SOURCE=200809L
+DEFS = -D_GNU_SOURCE -D_FORTIFY_SOURCE=2
 INCLUDES = -I/usr/include -I./include
 LIBS= -lreadline
 BUILD := debug
@@ -38,5 +38,5 @@ clean:
 	find . -name "*.o" -delete & \
 	find . -name "*.a" -delete & \
 	find . -name "*.out" -delete & \
-	find . -name "ep1sh" -delete
+	find . -name "ep1sh" -type f -delete
 
