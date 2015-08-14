@@ -18,12 +18,11 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
     snprintf(prompt, sizeof(prompt), "[%s] ", getcwd(pwd, PATH_MAX - 1));
 
     input = readline(prompt);
-
     if (!input)
       break;
 
     add_history(input);
-    argv = ep1sh_tokenize(input, &argc);
+    argv = ep1sh_split_string(input, &argc, ' ');
 
     if (!argc) {
       FREE(input);
@@ -33,60 +32,18 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
 
     e.key = argv[0];
     ep = hsearch(e, FIND);
-    
-    // we're either dealing with an internal method
-    // or an executable that can be found in $PATH
-    // or relative to the cwd
-    if (ep)
+
+    if (ep) // internal command
       command_errcode = (*(ep1sh_command)ep->data)(argc, argv);
-    else 
+    else // executable
       command_errcode = ep1sh_command_execute(argc, argv);
 
     FREE(input);
-    FREE(argv); // FIXME WRONG. Must free each of them. Create a ARR_FREE macro
-
+    FREE_ARR(argv, argc);
     // TODO HANDLE QUIT SIGNAL
   }
 
   ep1sh_destroy();
-}
-
-
-char** ep1sh_tokenize(const char* input, unsigned* size)
-{
-  unsigned count = 0;
-  unsigned i = 0;
-  size_t input_size = strlen(input);
-  char** result = NULL;
-  char* tmp = strndup(input, input_size);
-  char* tmp_init = tmp;
-
-  while (i < input_size) {
-    while (isspace(tmp[i++]) && i < input_size)
-      ;
-    while (!isspace(tmp[i++]) && i < input_size)
-      ;
-    count++;
-  }
-
-  result = malloc((count+1) * sizeof(*result));
-  ASSERT(result, "Couldn't allocate memory during tokenization");
-  count = 0;
-
-  tmp = strtok(tmp, " ");
-  while (tmp != NULL) {
-    *(result + count) = strdup(tmp);
-    ASSERT(result + count, "Couldn't allocate memory during tokenization");
-    tmp = strtok(NULL, " ");
-    count++;
-  }
-
-  result[count] = NULL;
-
-  *size = count;
-
-  FREE(tmp_init);
-  return result;
 }
 
 void ep1sh_init_commands_table()

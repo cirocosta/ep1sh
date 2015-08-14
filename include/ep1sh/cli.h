@@ -35,7 +35,6 @@ static ep1sh_command_t EP1SH_PROCEDURES[] = {
 #define EP1SH_PROCEDURES_SIZE                                                  \
   (sizeof(EP1SH_PROCEDURES) / sizeof(EP1SH_PROCEDURES[0]))
 
-char** ep1sh_tokenize(const char* input, unsigned* size);
 void ep1sh_init_commands_table();
 void ep1sh_destroy();
 void ep1sh_command_ep1sh();
