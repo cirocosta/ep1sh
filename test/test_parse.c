@@ -47,6 +47,8 @@ void test3()
   for (unsigned i = 0; i < argc; i++)
     ASSERT(strcmp(argv[i], expected[i]) == 0, "%s != %s", argv[i], expected[i]);
   ASSERT(argv[argc] == NULL, "Must end with a NULL");
+
+  FREE(argv);
 }
 
 void test4()

@@ -14,7 +14,7 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
   rl_bind_key('\t', rl_complete);
 
   while (1) {
-    // FIXME what if 100 is not sufficient? [1]
+    // FIXME what if 100 is not sufficient? [1] -- asprintf
     snprintf(prompt, sizeof(prompt), "[%s] ", getcwd(pwd, PATH_MAX - 1));
 
     input = readline(prompt);
