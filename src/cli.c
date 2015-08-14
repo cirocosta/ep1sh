@@ -1,6 +1,6 @@
 #include "ep1sh/cli.h"
 
-void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
+void ep1sh_command_ep1sh(int cli_argc, char** cli_argv, char** envp)
 {
   int command_errcode = 0;
   char* input = NULL;
@@ -36,7 +36,7 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv)
     if (ep) // internal command
       command_errcode = (*(ep1sh_command)ep->data)(argc, argv);
     else // executable
-      command_errcode = ep1sh_command_execute(argc, argv);
+      command_errcode = ep1sh_command_execute(argc, argv, envp);
 
     FREE(input);
     FREE_ARR(argv, argc);

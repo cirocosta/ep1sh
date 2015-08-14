@@ -37,6 +37,6 @@ static ep1sh_command_t EP1SH_PROCEDURES[] = {
 
 void ep1sh_init_commands_table();
 void ep1sh_destroy();
-void ep1sh_command_ep1sh();
+void ep1sh_command_ep1sh(int argc, char** argv, char** envp);
 
 #endif // ! EP1SH_CLI_H

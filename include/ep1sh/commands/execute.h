@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int ep1sh_command_execute(int argc, char* argv[]);
+int ep1sh_command_execute(int argc, char* argv[], char** env);
 bool file_ok_(const char* fname);
 bool can_execute_(const char* fname);
 int get_executable_path_(const char* ename, char* dest);

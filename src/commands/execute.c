@@ -58,7 +58,7 @@ int get_executable_path_(const char* ename, char* dest)
   return -1;
 }
 
-int ep1sh_command_execute(int argc, char** argv)
+int ep1sh_command_execute(int argc, char** argv, char** envp)
 {
   char executable_path[PATH_MAX] = {0};
   const size_t arg0_size = strlen(argv[0]);
@@ -78,7 +78,7 @@ int ep1sh_command_execute(int argc, char** argv)
       perror("(Error) ep1sh_command_execute: ");
       return EXIT_FAILURE;
     case 0: // child
-      child_errcode = execve(executable_path, argv, NULL);
+      child_errcode = execve(executable_path, argv, envp);
       exit(child_errcode);
     default: // parent
       wait(&child_errcode);
