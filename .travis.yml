@@ -21,7 +21,7 @@ before_script:
   - make 
 
 script:
-  - valgrind --leak-check=yes --error-exitcode=1 ./tests/test_parse.out
+  - valgrind --leak-check=yes --error-exitcode=1 ./tests/test_cli.out
 
 notifications:
   email: false
