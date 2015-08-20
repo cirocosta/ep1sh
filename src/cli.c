@@ -22,7 +22,7 @@ void ep1sh_command_ep1sh(int cli_argc, char** cli_argv, char** envp)
       break;
 
     add_history(input);
-    argv = ep1sh_split_string(input, &argc, ' ');
+    argv = ep1sh_tokenize_cli(input, &argc);
 
     if (!argc) {
       FREE(input);
@@ -59,6 +59,62 @@ void ep1sh_init_commands_table()
     ep = hsearch(e, ENTER);
     ASSERT(ep != NULL, "Couldn't insert EP1SH_PROCEDURE to HTABLE");
   }
+}
+
+char** ep1sh_tokenize_cli(const char* input, unsigned* size)
+{
+  char** argv = NULL;
+  int register i = 0;
+  argv = history_tokenize(input);
+
+  if (!size)
+    return argv;
+
+  if (!argv) {
+    *size = 0;
+    ASSERT((argv = malloc(sizeof(char*))), "Couldn't allocate");
+    argv[0] = NULL;
+
+    return argv;
+  }
+
+  for (; argv[i]; i++)
+    ;
+  *size = i;
+
+  return argv;
+}
+
+char** ep1sh_tokenize_PATH(const char* input, unsigned* size)
+{
+  char** argv = NULL;
+  char** argv2 = NULL;
+  char* tmp_history_word_delimiters = history_word_delimiters;
+  int register i = 0;
+  int register k = 0;
+
+  history_word_delimiters = ":";
+  argv = history_tokenize(input);
+  history_word_delimiters = tmp_history_word_delimiters;
+
+  // count size of the new argv and allocate
+  for (; argv[i]; i++)
+    if (argv[i][0] != ':')
+      k++;
+  ASSERT((argv2 = malloc(sizeof(*argv2) * (k + 1))),
+         "Couldn't allocate memory for new argv");
+
+  k = 0;
+  // populate new argv2 and free old argv
+  for (i = 0; argv[i]; i++)
+    if (argv[i][0] != ':')
+      argv2[k++] = strdup(argv[i]);
+  argv2[k] = NULL;
+  FREE_ARR(argv, i);
+
+  if (size)
+    *size = (unsigned)k;
+  return argv2;
 }
 
 void ep1sh_destroy() { hdestroy(); }

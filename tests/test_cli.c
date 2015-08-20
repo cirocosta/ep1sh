@@ -1,5 +1,6 @@
-#include "ep1sh/common.h"
+#include "ep1sh/cli.h"
 #include "ep1sh/debug.h"
+#include <readline/history.h>
 
 void test1()
 {
@@ -8,8 +9,9 @@ void test1()
 
   unsigned argc = 0;
   char** argv = NULL;
-  argv = ep1sh_split_string(input, &argc, ' ');
+  argv = ep1sh_tokenize_cli(input, &argc);
 
+  ASSERT(argc == 2, "%d != %d", argc, 2);
   for (unsigned i = 0; i < argc; i++)
     ASSERT(strcmp(argv[i], expected[i]) == 0, "%s != %s", argv[i], expected[i]);
   ASSERT(argv[argc] == NULL, "Must end with a NULL");
@@ -24,7 +26,7 @@ void test2()
 
   unsigned argc = 0;
   char** argv = NULL;
-  argv = ep1sh_split_string(input, &argc, ' ');
+  argv = ep1sh_tokenize_cli(input, &argc);
 
   ASSERT(argc == 2, "%d != %d", argc, 2);
   for (unsigned i = 0; i < argc; i++)
@@ -41,7 +43,7 @@ void test3()
 
   unsigned argc = 0;
   char** argv = NULL;
-  argv = ep1sh_split_string(input, &argc, ' ');
+  argv = ep1sh_tokenize_cli(input, &argc);
 
   ASSERT(argc == 0, "%d != %d", argc, 0);
   for (unsigned i = 0; i < argc; i++)
@@ -58,7 +60,43 @@ void test4()
 
   unsigned argc = 0;
   char** argv = NULL;
-  argv = ep1sh_split_string(input, &argc, ':');
+  argv = ep1sh_tokenize_PATH(input, &argc);
+
+  ASSERT(argc == 3, "%d != %d", argc, 3);
+  for (unsigned i = 0; i < argc; i++)
+    ASSERT(strcmp(argv[i], expected[i]) == 0, "%s != %s", argv[i], expected[i]);
+  ASSERT(argv[argc] == NULL, "Must end with a NULL");
+
+  FREE_ARR(argv, argc);
+}
+
+void test5()
+{
+  const char input[] = "gnome-open my\\ cool\\ file.pdf another_file.pdf";
+  const char* expected[] = { "gnome-open", "my\\ cool\\ file.pdf",
+                             "another_file.pdf", NULL };
+
+  unsigned argc = 0;
+  char** argv = NULL;
+  argv = ep1sh_tokenize_cli(input, &argc);
+
+  ASSERT(argc == 3, "%d != %d", argc, 3);
+  for (unsigned i = 0; i < argc; i++)
+    ASSERT(strcmp(argv[i], expected[i]) == 0, "%s != %s", argv[i], expected[i]);
+  ASSERT(argv[argc] == NULL, "Must end with a NULL");
+
+  FREE_ARR(argv, argc);
+}
+
+void test6()
+{
+  const char input[] = "/home:/home/Hue\\ Folder:/home/Hue/\"Br Br\"";
+  const char* expected[] = { "/home", "/home/Hue\\ Folder",
+                             "/home/Hue/\"Br Br\"", NULL };
+
+  unsigned argc = 0;
+  char** argv = NULL;
+  argv = ep1sh_tokenize_PATH(input, &argc);
 
   ASSERT(argc == 3, "%d != %d", argc, 3);
   for (unsigned i = 0; i < argc; i++)
@@ -78,6 +116,10 @@ int main()
   LOG("TEST3\tOK");
   test4();
   LOG("TEST4\tOK");
+  test5();
+  LOG("TEST5\tOK");
+  test6();
+  LOG("TEST6\tOK");
 
   return EXIT_SUCCESS;
 }

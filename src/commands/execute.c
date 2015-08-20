@@ -37,7 +37,7 @@ int get_executable_path_(const char* ename, char* dest)
     return 0;
   }
 
-  paths = ep1sh_split_string(getenv("PATH"), NULL, ':');
+  paths = ep1sh_tokenize_PATH(getenv("PATH"), NULL);
   if (!paths[0]) {
     FREE(paths);
     return -1;

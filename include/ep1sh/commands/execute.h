@@ -1,8 +1,8 @@
 #ifndef EP1SH__EXEC_H
 #define EP1SH__EXEC_H
 
-#include "ep1sh/debug.h"
 #include "ep1sh/common.h"
+#include "ep1sh/cli.h"
 
 #include <linux/limits.h>
 #include <sys/wait.h>
