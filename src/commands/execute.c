@@ -73,13 +73,13 @@ int ep1sh_command_execute(int argc, char** argv, char** envp)
     return EXIT_SUCCESS;
   }
 
-  switch (pid = fork()) {
+  switch (pid = vfork()) {
     case -1: // error
       perror("(Error) ep1sh_command_execute: ");
       return EXIT_FAILURE;
     case 0: // child
       child_errcode = execve(executable_path, argv, envp);
-      exit(child_errcode);
+      _exit(child_errcode);
     default: // parent
       wait(&child_errcode);
       break;
