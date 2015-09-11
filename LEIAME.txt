@@ -1,0 +1,26 @@
+--------
+| ep1sh |
+--------
+
+Compilação
+----------
+
+Para compilá-lo basta executar `make` na raíz do projeto, o que irá então gerar o arquivo `ep1sh` (também na raíz) assim como os arquivos objeto usados na compilação.
+
+Desta forma, para utilizar o shell basta:
+
+- make
+- ./ep1sh
+
+
+
+Comandos
+--------
+
+O shell suporta os seguintes comandos:
+- cd
+- pwd
+
+Além de ser capaz de executar qualquer executável que possa ser encontrado em `$PATH` ou um executável local, sendo passados os devidos argumentos.
+
+
